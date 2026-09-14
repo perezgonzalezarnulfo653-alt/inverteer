@@ -9,7 +9,17 @@ class ContactHandler(SimpleHTTPRequestHandler):
             self.send_error(404)
             return
 
-        content_length = int(self.headers.get("Content-Length", "0"))
+        content_type = self.headers.get_content_type()
+        if content_type != "application/x-www-form-urlencoded":
+            self.send_error(400, "Unsupported content type")
+            return
+
+        try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            self.send_error(400, "Invalid Content-Length")
+            return
+
         charset = self.headers.get_content_charset("utf-8")
 
         try:
