@@ -14,11 +14,20 @@ class ContactHandler(SimpleHTTPRequestHandler):
 
         try:
             body = self.rfile.read(content_length).decode(charset)
-        except UnicodeDecodeError:
+        except (LookupError, UnicodeDecodeError):
             self.send_error(400, "Invalid request encoding")
             return
 
-        payload = parse_qs(body, keep_blank_values=True)
+        try:
+            payload = parse_qs(
+                body,
+                keep_blank_values=True,
+                strict_parsing=True,
+                errors="strict",
+            )
+        except (UnicodeDecodeError, ValueError):
+            self.send_error(400, "Invalid form payload")
+            return
 
         name = escape(payload.get("name", [""])[0])
         number = escape(payload.get("number", [""])[0])
