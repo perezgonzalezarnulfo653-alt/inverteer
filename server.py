@@ -24,6 +24,10 @@ class ContactHandler(SimpleHTTPRequestHandler):
             self.send_error(400, "Invalid Content-Length")
             return
 
+        if content_length < 0:
+            self.send_error(400, "Invalid Content-Length")
+            return
+
         charset = self.headers.get_content_charset("utf-8")
 
         try:
@@ -74,6 +78,6 @@ class ContactHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = ThreadingHTTPServer(("127.0.0.1", 8000), ContactHandler)
-    print("Serving on http://127.0.0.1:8000")
-    server.serve_forever()
+    with ThreadingHTTPServer(("127.0.0.1", 8000), ContactHandler) as server:
+        print("Serving on http://127.0.0.1:8000")
+        server.serve_forever()
