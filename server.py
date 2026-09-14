@@ -14,8 +14,12 @@ class ContactHandler(SimpleHTTPRequestHandler):
             self.send_error(400, "Unsupported content type")
             return
 
+        if "Content-Length" not in self.headers:
+            self.send_error(400, "Missing Content-Length")
+            return
+
         try:
-            content_length = int(self.headers.get("Content-Length", "0"))
+            content_length = int(self.headers["Content-Length"])
         except ValueError:
             self.send_error(400, "Invalid Content-Length")
             return
