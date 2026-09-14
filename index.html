@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>caliss</title>
+</head>
+<body>
+  <main>
+    <h1>caliss</h1>
+    <form id="contact-form" action="/contact" method="post">
+      <fieldset>
+        <legend>Contact details</legend>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required>
+
+        <label for="number">Number</label>
+        <input id="number" name="number" type="tel" required>
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+
+        <button type="submit">Submit</button>
+      </fieldset>
+    </form>
+    <p id="form-note" aria-live="polite" role="status" hidden>
+      Submitting this form requires a backend endpoint.
+    </p>
+  </main>
+  <script>
+    const form = document.getElementById('contact-form');
+    const formNote = document.getElementById('form-note');
+
+    if (window.location.protocol === 'file:') {
+      formNote.hidden = false;
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        formNote.textContent = 'Submission is unavailable when opening index.html directly from disk. Serve the page with a backend endpoint to submit the form.';
+      });
+    }
+  </script>
+</body>
+</html>
