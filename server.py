@@ -10,7 +10,14 @@ class ContactHandler(SimpleHTTPRequestHandler):
             return
 
         content_length = int(self.headers.get("Content-Length", "0"))
-        body = self.rfile.read(content_length).decode("utf-8")
+        charset = self.headers.get_content_charset("utf-8")
+
+        try:
+            body = self.rfile.read(content_length).decode(charset)
+        except UnicodeDecodeError:
+            self.send_error(400, "Invalid request encoding")
+            return
+
         payload = parse_qs(body, keep_blank_values=True)
 
         name = escape(payload.get("name", [""])[0])
