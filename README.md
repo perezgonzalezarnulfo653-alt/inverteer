@@ -1,6 +1,6 @@
 # inverteer
 
-Minimal `caliss` page with `name`, `number`, and `email` fields in `index.html`.
+Minimal `caliss` contact page with `name`, `number`, and `email` fields in `index.html`.
 
 Open the repository's local `index.html` file in a browser to view the form.
 The form submits the parameters `name`, `number`, and `email`.
